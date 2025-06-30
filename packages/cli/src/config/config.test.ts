@@ -252,6 +252,7 @@ describe('loadCliConfig proxy', () => {
   beforeEach(() => {
     vi.resetAllMocks();
     vi.mocked(os.homedir).mockReturnValue('/mock/home/user');
+    process.env = {};
     vi.stubEnv('GEMINI_API_KEY', 'test-api-key');
   });
 
@@ -330,6 +331,13 @@ describe('loadCliConfig proxy', () => {
     const settings: Settings = { proxy: 'http://settings.example.com' };
     const config = await loadCliConfig(settings, [], 'test-session');
     expect(config.getProxy()).toBe('http://cli.example.com');
+  });
+
+  it('should allow overriding with an empty string from CLI', async () => {
+    process.argv = ['node', 'script.js', '--proxy', ''];
+    const settings: Settings = { proxy: 'http://settings.example.com' };
+    const config = await loadCliConfig(settings, [], 'test-session');
+    expect(config.getProxy()).toBe('');
   });
 });
 

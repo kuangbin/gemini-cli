@@ -241,14 +241,14 @@ export async function loadCliConfig(
     },
     checkpointing: argv.checkpointing || settings.checkpointing?.enabled,
     proxy:
-      argv.proxy ||
-      settings.proxy ||
-      process.env.HTTPS_PROXY ||
-      process.env.https_proxy ||
-      process.env.HTTP_PROXY ||
-      process.env.http_proxy ||
-      process.env.ALL_PROXY ||
-      process.env.all_proxy,
+      argv.proxy ??
+      settings.proxy ??
+      (process.env.HTTPS_PROXY ||
+        process.env.https_proxy ||
+        process.env.HTTP_PROXY ||
+        process.env.http_proxy ||
+        process.env.ALL_PROXY ||
+        process.env.all_proxy),
     cwd: process.cwd(),
     fileDiscoveryService: fileService,
     bugCommand: settings.bugCommand,
