@@ -330,6 +330,14 @@ describe('loadCliConfig proxy', () => {
     const config = await loadCliConfig(settings, [], 'test-session');
     expect(config.getProxy()).toBe('http://settings.example.com');
   });
+
+  it('should prioritize CLI flag over settings and env vars', async () => {
+    process.argv = ['node', 'script.js', '--proxy', 'http://cli.example.com'];
+    process.env.HTTPS_PROXY = 'http://https.example.com';
+    const settings: Settings = { proxy: 'http://settings.example.com' };
+    const config = await loadCliConfig(settings, [], 'test-session');
+    expect(config.getProxy()).toBe('http://cli.example.com');
+  });
 });
 
 describe('Hierarchical Memory Loading (config.ts) - Placeholder Suite', () => {

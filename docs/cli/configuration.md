@@ -319,6 +319,10 @@ Arguments passed directly when running the CLI can override other configurations
 - **`--version`**:
   - Displays the version of the CLI.
 
+- **`--proxy <proxy_url>`**:
+  - **Description:** Sets the proxy server to use for all outbound HTTP/HTTPS requests.
+  - **Example:** `npm start -- --proxy socks5://localhost:1080`
+
 ## Context Files (Hierarchical Instructional Context)
 
 While not strictly configuration for the CLI's _behavior_, context files (defaulting to `GEMINI.md` but configurable via the `contextFileName` setting) are crucial for configuring the _instructional context_ (also referred to as "memory") provided to the Gemini model. This powerful feature allows you to give project-specific instructions, coding style guides, or any relevant background information to the AI, making its responses more tailored and accurate to your needs. The CLI includes UI elements, such as an indicator in the footer showing the number of loaded context files, to keep you informed about the active context.
