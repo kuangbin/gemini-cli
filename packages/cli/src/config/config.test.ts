@@ -257,6 +257,8 @@ describe('loadCliConfig proxy', () => {
     vi.stubEnv('https_proxy', '');
     vi.stubEnv('HTTP_PROXY', '');
     vi.stubEnv('http_proxy', '');
+    vi.stubEnv('ALL_PROXY', '');
+    vi.stubEnv('all_proxy', '');
   });
 
   afterEach(() => {
