@@ -248,23 +248,16 @@ describe('loadCliConfig telemetry', () => {
 
 describe('loadCliConfig proxy', () => {
   const originalArgv = process.argv;
-  const originalEnv = { ...process.env };
 
   beforeEach(() => {
     vi.resetAllMocks();
     vi.mocked(os.homedir).mockReturnValue('/mock/home/user');
-    process.env.GEMINI_API_KEY = 'test-api-key'; // Ensure API key is set for tests
-    delete process.env.HTTPS_PROXY;
-    delete process.env.https_proxy;
-    delete process.env.HTTP_PROXY;
-    delete process.env.http_proxy;
-    delete process.env.ALL_PROXY;
-    delete process.env.all_proxy;
+    vi.stubEnv('GEMINI_API_KEY', 'test-api-key');
   });
 
   afterEach(() => {
     process.argv = originalArgv;
-    process.env = originalEnv;
+    vi.unstubAllEnvs();
     vi.restoreAllMocks();
   });
 
@@ -277,7 +270,7 @@ describe('loadCliConfig proxy', () => {
 
   it('should use proxy from HTTPS_PROXY env var', async () => {
     process.argv = ['node', 'script.js'];
-    process.env.HTTPS_PROXY = 'http://https.example.com';
+    vi.stubEnv('HTTPS_PROXY', 'http://https.example.com');
     const settings: Settings = {};
     const config = await loadCliConfig(settings, [], 'test-session');
     expect(config.getProxy()).toBe('http://https.example.com');
@@ -285,7 +278,7 @@ describe('loadCliConfig proxy', () => {
 
   it('should use proxy from https_proxy env var', async () => {
     process.argv = ['node', 'script.js'];
-    process.env.https_proxy = 'http://https_lower.example.com';
+    vi.stubEnv('https_proxy', 'http://https_lower.example.com');
     const settings: Settings = {};
     const config = await loadCliConfig(settings, [], 'test-session');
     expect(config.getProxy()).toBe('http://https_lower.example.com');
@@ -293,7 +286,7 @@ describe('loadCliConfig proxy', () => {
 
   it('should use proxy from HTTP_PROXY env var', async () => {
     process.argv = ['node', 'script.js'];
-    process.env.HTTP_PROXY = 'http://http.example.com';
+    vi.stubEnv('HTTP_PROXY', 'http://http.example.com');
     const settings: Settings = {};
     const config = await loadCliConfig(settings, [], 'test-session');
     expect(config.getProxy()).toBe('http://http.example.com');
@@ -301,7 +294,7 @@ describe('loadCliConfig proxy', () => {
 
   it('should use proxy from http_proxy env var', async () => {
     process.argv = ['node', 'script.js'];
-    process.env.http_proxy = 'http://http_lower.example.com';
+    vi.stubEnv('http_proxy', 'http://http_lower.example.com');
     const settings: Settings = {};
     const config = await loadCliConfig(settings, [], 'test-session');
     expect(config.getProxy()).toBe('http://http_lower.example.com');
@@ -309,7 +302,7 @@ describe('loadCliConfig proxy', () => {
 
   it('should use proxy from ALL_PROXY env var', async () => {
     process.argv = ['node', 'script.js'];
-    process.env.ALL_PROXY = 'http://all.example.com';
+    vi.stubEnv('ALL_PROXY', 'http://all.example.com');
     const settings: Settings = {};
     const config = await loadCliConfig(settings, [], 'test-session');
     expect(config.getProxy()).toBe('http://all.example.com');
@@ -317,7 +310,7 @@ describe('loadCliConfig proxy', () => {
 
   it('should use proxy from all_proxy env var', async () => {
     process.argv = ['node', 'script.js'];
-    process.env.all_proxy = 'http://all_lower.example.com';
+    vi.stubEnv('all_proxy', 'http://all_lower.example.com');
     const settings: Settings = {};
     const config = await loadCliConfig(settings, [], 'test-session');
     expect(config.getProxy()).toBe('http://all_lower.example.com');
@@ -325,7 +318,7 @@ describe('loadCliConfig proxy', () => {
 
   it('should prioritize settings over env vars', async () => {
     process.argv = ['node', 'script.js'];
-    process.env.HTTPS_PROXY = 'http://https.example.com';
+    vi.stubEnv('HTTPS_PROXY', 'http://https.example.com');
     const settings: Settings = { proxy: 'http://settings.example.com' };
     const config = await loadCliConfig(settings, [], 'test-session');
     expect(config.getProxy()).toBe('http://settings.example.com');
@@ -333,7 +326,7 @@ describe('loadCliConfig proxy', () => {
 
   it('should prioritize CLI flag over settings and env vars', async () => {
     process.argv = ['node', 'script.js', '--proxy', 'http://cli.example.com'];
-    process.env.HTTPS_PROXY = 'http://https.example.com';
+    vi.stubEnv('HTTPS_PROXY', 'http://https.example.com');
     const settings: Settings = { proxy: 'http://settings.example.com' };
     const config = await loadCliConfig(settings, [], 'test-session');
     expect(config.getProxy()).toBe('http://cli.example.com');
