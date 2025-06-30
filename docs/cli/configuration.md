@@ -185,6 +185,11 @@ In addition to a project settings file, a project's `.gemini` directory can cont
     "hideTips": true
     ```
 
+- **`proxy`** (string):
+  - **Description:** Sets the proxy server to use for all outbound HTTP/HTTPS requests.
+  - **Default:** `null`
+  - **Example:** `"proxy": "socks5://localhost:1080"`
+
 ### Example `settings.json`:
 
 ```json
