@@ -252,8 +252,11 @@ describe('loadCliConfig proxy', () => {
   beforeEach(() => {
     vi.resetAllMocks();
     vi.mocked(os.homedir).mockReturnValue('/mock/home/user');
-    process.env = {};
     vi.stubEnv('GEMINI_API_KEY', 'test-api-key');
+    vi.stubEnv('HTTPS_PROXY', '');
+    vi.stubEnv('https_proxy', '');
+    vi.stubEnv('HTTP_PROXY', '');
+    vi.stubEnv('http_proxy', '');
   });
 
   afterEach(() => {
